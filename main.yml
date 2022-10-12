@@ -1,0 +1,21 @@
+---
+- name: Add Listening TCP port to Firewalld
+  hosts: localhost
+  gather_facts: true
+  become: true
+  tasks:
+   - name: tcp ports facts
+     listen_ports_facts:
+
+   - name: Add ports to firewall
+     firewalld:
+       port: "{{ item }}/tcp"
+       state: enabled
+       immediate: true
+       permanent: true
+     loop: "{{ ansible_facts.tcp_listen  | map(attribute='port') | sort | list }}"
+     register: ports_added_to_firewalld
+   
+   - name: print Ports Added
+     debug:
+       var: ports_added_to_firewalld
