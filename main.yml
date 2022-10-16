@@ -4,6 +4,11 @@
   gather_facts: true
   become: true
   tasks:
+   - name: Install or upgrade the net-tools package
+     yum:
+       name: net-tools
+       state: latest
+       
    - name: tcp ports facts
      listen_ports_facts:
 
